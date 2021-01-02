@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="appname">pet_finder</string>
+<string name="facebook_app_id">225543319080645</string>
+<string name="fb_login_protocol_scheme">fb225543319080645</string>
+</resources>

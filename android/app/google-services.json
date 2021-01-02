@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "836635181329",
+    "project_id": "petfinder-6d923",
+    "storage_bucket": "petfinder-6d923.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836635181329:android:92aa10ee4984a1dbf2ccb0",
+        "android_client_info": {
+          "package_name": "com.example.pet_finder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836635181329-hgce0kaac5gitpblshr5v7l9e9kjj5mn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pet_finder",
+            "certificate_hash": "fbc261dd88692b2d8aa130671f847c3f241d1a9d"
+          }
+        },
+        {
+          "client_id": "836635181329-vqfbv0sa93uos4amq24r9dbk76kcpa64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQx6oaL3DEPAUf2tvQBE_ApDSGH6DU2aE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836635181329-vqfbv0sa93uos4amq24r9dbk76kcpa64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
