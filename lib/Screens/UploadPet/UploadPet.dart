@@ -16,6 +16,7 @@ class _UploadPetState extends State<UploadPet> {
   String petName, petColor, petLocation, petDescription;
   double petAge, petWeight;
   File image;
+  int timeStamp = DateTime.now().millisecondsSinceEpoch;
   var imageUrl;
 
   @override
@@ -254,6 +255,7 @@ class _UploadPetState extends State<UploadPet> {
               color: Colors.blue,
               onPressed: () async {
                 Map<String, dynamic> data = {
+                  'TimeStamp': timeStamp,
                   'Uid': uid,
                   'ImageUrl': imageUrl,
                   'petName': petName,

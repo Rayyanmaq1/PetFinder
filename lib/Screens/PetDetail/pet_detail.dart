@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/User_Avatar/user_avatar.dart';
+import 'package:pet_finder/Widgets/CustomShimmer.dart';
 
-class PetDetail extends StatelessWidget {
+class PetDetail extends StatefulWidget {
   final DocumentSnapshot pet;
 
   PetDetail({@required this.pet});
 
   @override
+  _PetDetailState createState() => _PetDetailState(pet: pet);
+}
+
+class _PetDetailState extends State<PetDetail> {
+  final DocumentSnapshot pet;
+  _PetDetailState({this.pet});
+  DocumentSnapshot userFavourite;
+  DocumentSnapshot postedInfo;
+  @override
+  // ignore: must_call_super
+  initState() {
+    Crud().checkFavourite(widget.pet.id).then((value) {
+      setState(() {
+        userFavourite = value;
+        Crud().userPostedinfo(pet.id).then((value) {
+          postedInfo = value;
+        });
+      });
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -42,11 +65,11 @@ class PetDetail extends StatelessWidget {
             child: Stack(
               children: [
                 Hero(
-                  tag: pet.get('ImageUrl'),
+                  tag: widget.pet.get('ImageUrl'),
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(pet.get('ImageUrl')),
+                        image: NetworkImage(widget.pet.get('ImageUrl')),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.only(
@@ -73,7 +96,7 @@ class PetDetail extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            pet.get('petName'),
+                            widget.pet.get('petName'),
                             style: TextStyle(
                               color: Colors.grey[800],
                               fontWeight: FontWeight.bold,
@@ -94,7 +117,7 @@ class PetDetail extends StatelessWidget {
                                 width: 4,
                               ),
                               Text(
-                                pet.get('petLocation'),
+                                widget.pet.get('petLocation'),
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 14,
@@ -108,15 +131,30 @@ class PetDetail extends StatelessWidget {
                         ],
                       ),
                       Container(
-                        height: 50,
-                        width: 50,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
+                          color: Colors.grey[100],
                         ),
-                        child: Icon(
-                          Icons.favorite,
-                          size: 24,
-                        ),
+                        height: 50,
+                        width: 50,
+                        child: userFavourite != null
+                            ? GestureDetector(
+                                onTap: () {
+                                  Crud().favourite(widget.pet.id).then((_) {
+                                    setState(() {
+                                      initState();
+                                    });
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.favorite,
+                                  color: userFavourite.get('State')
+                                      ? Colors.red
+                                      : Colors.grey,
+                                  size: 28,
+                                ),
+                              )
+                            : CustomShimmer(),
                       ),
                     ],
                   ),
@@ -125,9 +163,10 @@ class PetDetail extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      buildPetFeature("4 months", "Age"),
-                      buildPetFeature("Grey", "Color"),
-                      buildPetFeature("11 Kg", "Weight"),
+                      buildPetFeature(pet.get('petAge').toString(), "Age"),
+                      buildPetFeature(pet.get('petColor'), "Color"),
+                      buildPetFeature(
+                          pet.get('petWeight').toString(), "Weight"),
                     ],
                   ),
                 ),
@@ -148,7 +187,7 @@ class PetDetail extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    (pet.get('petDescription')),
+                    (widget.pet.get('petDescription')),
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 14,
@@ -184,13 +223,17 @@ class PetDetail extends StatelessWidget {
                               SizedBox(
                                 height: 4,
                               ),
-                              Text(
-                                "Nannie Barker",
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                ),
-                              ),
+                              postedInfo != null
+                                  ? Text(
+                                      postedInfo.get('FirstName') +
+                                          ' ' +
+                                          postedInfo.get('SecondName'),
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 14,
+                                      ),
+                                    )
+                                  : CustomShimmer(),
                             ],
                           ),
                         ],
