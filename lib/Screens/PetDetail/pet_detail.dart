@@ -118,11 +118,18 @@ class _PetDetailState extends State<PetDetail> {
                               SizedBox(
                                 width: 4,
                               ),
-                              Text(
-                                widget.pet.get('petLocation'),
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
+                              Container(
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width *
+                                            0.7),
+                                child: Text(
+                                  widget.pet.get('petLocation'),
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
                               SizedBox(
@@ -150,7 +157,8 @@ class _PetDetailState extends State<PetDetail> {
                                 },
                                 child: Icon(
                                   Icons.favorite,
-                                  color: userFavourite.get('State')
+                                  color: userFavourite.exists ??
+                                          userFavourite.get('State')
                                       ? Colors.red
                                       : Colors.grey,
                                   size: 28,

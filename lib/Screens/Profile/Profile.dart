@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pet_finder/Screens/Pet_Widget/pet_widget.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -23,9 +25,11 @@ class _ProfileState extends State<Profile> {
 
   TextStyle textStyle =
       TextStyle(color: Colors.blue, fontWeight: FontWeight.bold);
-
+  int totalPage;
   @override
   Widget build(BuildContext context) {
+    PageController controller = PageController();
+
     return Scaffold(
       body: userData != null
           ? Container(
@@ -47,6 +51,9 @@ class _ProfileState extends State<Profile> {
                   ),
                   CircleAvatar(
                     radius: 60,
+                    backgroundImage: userData.data().containsKey('Image')
+                        ? NetworkImage(userData.get('Image'))
+                        : AssetImage('assets/images/ProfilePic.png'),
                   ),
                   SizedBox(
                     height: 40,
@@ -112,13 +119,71 @@ class _ProfileState extends State<Profile> {
                                             'Phone Number',
                                             style: textStyle,
                                           ),
-                                          FutureBuilder(
-                                              future: FirebaseFirestore.instance
-                                                  .collection('UserData')
-                                                  .doc(uid)
-                                                  .get(),
-                                              builder: (context, snapshot) {}),
+                                          userData
+                                                  .data()
+                                                  .containsKey('PhoneNumber')
+                                              ? Text(
+                                                  userData.get('PhoneNumber'))
+                                              : Text('-'),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 40,
+                                      ),
+                                      Center(
+                                          child: Text(
+                                        'Your Posts',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                      SizedBox(
+                                        height: 40,
+                                      ),
+                                      Container(
+                                        height: 270,
+                                        child: FutureBuilder(
+                                          future: FirebaseFirestore.instance
+                                              .collection('PetData')
+                                              .where('Uid', isEqualTo: uid)
+                                              .get(),
+                                          builder: (context, snapshot) {
+                                            if (ConnectionState.waiting ==
+                                                snapshot.connectionState) {
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            } else {
+                                              return PageView.builder(
+                                                  controller: controller,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      snapshot.data.docs.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Container(
+                                                      height: 250,
+                                                      child: PetWidget(
+                                                          pet: snapshot
+                                                              .data.docs[index],
+                                                          index: index),
+                                                    );
+                                                  });
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      Container(
+                                        child: SmoothPageIndicator(
+                                            effect: WormEffect(),
+                                            onDotClicked: (index) {
+                                              controller.animateToPage(index,
+                                                  duration: Duration(
+                                                      milliseconds: 200),
+                                                  curve: Curves.easeInCubic);
+                                            },
+                                            controller: controller,
+                                            count: 3),
                                       ),
                                     ],
                                   ),

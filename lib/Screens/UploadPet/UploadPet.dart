@@ -11,7 +11,7 @@ class UploadPet extends StatefulWidget {
 
 class _UploadPetState extends State<UploadPet> {
   String petCondition = 'MATING';
-  String petCategory = 'CATS';
+  String petCategory = 'CAT';
   String petSold = 'Not Sold';
   String petName, petColor, petLocation, petDescription;
   double petAge, petWeight;

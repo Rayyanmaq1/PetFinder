@@ -26,6 +26,7 @@ class _PetWidgetState extends State<PetWidget> {
     Crud().checkFavourite(widget.pet.id).then((value) {
       setState(() {
         userFavourite = value;
+        print(userFavourite.data());
       });
     });
   }
@@ -104,7 +105,8 @@ class _PetWidgetState extends State<PetWidget> {
                                 },
                                 child: Icon(
                                   Icons.favorite,
-                                  color: userFavourite.get('State')
+                                  color: userFavourite.exists ??
+                                          userFavourite.get('State')
                                       ? Colors.red
                                       : Colors.grey,
                                   size: 22,
@@ -178,11 +180,16 @@ class _PetWidgetState extends State<PetWidget> {
                         width: 4,
                       ),
                       widget.pet != null
-                          ? Text(
-                              widget.pet.get('petLocation'),
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 12,
+                          ? Expanded(
+                              child: Text(
+                                widget.pet.get('petLocation'),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 12,
+                                ),
                               ),
                             )
                           : CustomShimmer(),
