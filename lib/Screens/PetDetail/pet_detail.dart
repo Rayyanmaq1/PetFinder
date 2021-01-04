@@ -25,7 +25,9 @@ class _PetDetailState extends State<PetDetail> {
       setState(() {
         userFavourite = value;
         Crud().userPostedinfo(pet.id).then((value) {
-          postedInfo = value;
+          setState(() {
+            postedInfo = value;
+          });
         });
       });
     });

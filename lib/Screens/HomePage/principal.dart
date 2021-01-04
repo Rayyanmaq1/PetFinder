@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pet_finder/Screens/Category_list/category_list.dart';
 import 'package:pet_finder/Screens/Pet_Widget/pet_widget.dart';
 import 'package:pet_finder/Screens/Data/data.dart';
+import 'package:pet_finder/Screens/Search/Search.dart';
 import 'package:pet_finder/Screens/UploadPet/UploadPet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Model/crud.dart';
@@ -86,28 +88,36 @@ class _PrincipalState extends State<Principal> {
             ),
             Padding(
               padding: EdgeInsets.all(16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  hintStyle: TextStyle(fontSize: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
+              child: Container(
+                child: TextField(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Search();
+                    }));
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: TextStyle(fontSize: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
                     ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  contentPadding: EdgeInsets.only(
-                    right: 30,
-                  ),
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.only(right: 16.0, left: 24.0),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                      size: 24,
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    contentPadding: EdgeInsets.only(
+                      right: 30,
+                    ),
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.only(right: 16.0, left: 24.0),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -239,11 +249,11 @@ class _PrincipalState extends State<Principal> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => CategoryList(category: category)),
-          // );
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CategoryList(category: category),
+              ));
         },
         child: Container(
           height: 80,

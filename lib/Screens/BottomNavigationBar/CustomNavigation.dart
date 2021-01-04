@@ -15,39 +15,43 @@ class _CustomNavigationState extends State<CustomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: Colors.white,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen when keyboard appears.
-      stateManagement: true,
-      hideNavigationBarWhenKeyboardShows:
-          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        colorBehindNavBar: Colors.white,
-      ),
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: ItemAnimationProperties(
-        // Navigation Bar's items animation properties.
-        duration: Duration(milliseconds: 200),
-        curve: Curves.ease,
-      ),
-      screenTransitionAnimation: ScreenTransitionAnimation(
-        // Screen transition animation on change of selected tab.
-        animateTabTransition: true,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
-      ),
-      navBarStyle:
-          NavBarStyle.style12, // Choose the nav bar style with this property.
+    return Stack(
+      children: [
+        PersistentTabView(
+          context,
+          controller: _controller,
+          screens: _buildScreens(),
+          items: _navBarsItems(),
+          confineInSafeArea: true,
+          backgroundColor: Colors.white,
+          handleAndroidBackButtonPress: true,
+          resizeToAvoidBottomInset:
+              true, // This needs to be true if you want to move up the screen when keyboard appears.
+          stateManagement: true,
+          hideNavigationBarWhenKeyboardShows:
+              true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
+          decoration: NavBarDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            colorBehindNavBar: Colors.white,
+          ),
+          popAllScreensOnTapOfSelectedTab: true,
+          popActionScreens: PopActionScreensType.all,
+          itemAnimationProperties: ItemAnimationProperties(
+            // Navigation Bar's items animation properties.
+            duration: Duration(milliseconds: 200),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: ScreenTransitionAnimation(
+            // Screen transition animation on change of selected tab.
+            animateTabTransition: true,
+            curve: Curves.ease,
+            duration: Duration(milliseconds: 200),
+          ),
+          navBarStyle: NavBarStyle
+              .style9, // Choose the nav bar style with this property.
+        )
+      ],
     );
   }
 
@@ -60,7 +64,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
       PersistentBottomNavBarItem(
           icon: Icon(Icons.favorite),
           title: ("favourite"),
-          activeColor: Colors.blue,
+          activeColor: Colors.red,
           inactiveColor: Colors.grey),
       PersistentBottomNavBarItem(
           icon: Icon(Icons.home),
@@ -70,7 +74,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
       PersistentBottomNavBarItem(
           icon: Icon(Icons.person),
           title: ("Profile"),
-          activeColor: Colors.blue,
+          activeColor: Colors.green,
           inactiveColor: Colors.grey),
     ];
   }

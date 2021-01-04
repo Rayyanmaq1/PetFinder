@@ -179,7 +179,7 @@ class _UploadPetState extends State<UploadPet> {
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButton<String>(
                         value: petCategory,
-                        items: <String>['HAMSTERS', 'CATS', 'BUNNIES', 'DOGS']
+                        items: <String>['HAMSTER', 'CAT', 'BUNNY', 'DOG']
                             .map((String value) {
                           return new DropdownMenuItem<String>(
                             value: value,
@@ -268,7 +268,7 @@ class _UploadPetState extends State<UploadPet> {
                   'petCondition': petCondition,
                   'petSold': petSold,
                 };
-                print(data);
+
                 await crud.setPetdata(data).then((_) {
                   showToast();
                   Navigator.pop(context);

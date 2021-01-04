@@ -7,6 +7,13 @@ class Crud {
     FirebaseFirestore.instance.collection('PetData').doc().set(data);
   }
 
+  getPetDataforCategory(category) async {
+    return await FirebaseFirestore.instance
+        .collection('PetData')
+        .where('petCategory', isEqualTo: category)
+        .get();
+  }
+
   uploadpetImage(image, imageName) async {
     var downloadUrl;
     var snapshot =
@@ -14,7 +21,6 @@ class Crud {
 
     await snapshot.ref.getDownloadURL().then((value) {
       downloadUrl = value;
-      print(downloadUrl);
     });
 
     return downloadUrl;
@@ -29,6 +35,19 @@ class Crud {
         .collection('PetData')
         .orderBy('TimeStamp', descending: false)
         .get();
+  }
+
+  currentUserData() async {
+    String uid = userUid();
+
+    return await FirebaseFirestore.instance
+        .collection('UserData')
+        .doc(uid)
+        .get();
+  }
+
+  getAllpets() async {
+    return FirebaseFirestore.instance.collection('PetData').snapshots();
   }
 
   checkFavourite(postID) async {
