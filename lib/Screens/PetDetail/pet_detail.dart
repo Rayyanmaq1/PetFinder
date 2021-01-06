@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
 import 'package:pet_finder/Model/crud.dart';
+import 'package:pet_finder/Screens/BottomNavigationBar/CustomNavigation.dart';
+import 'package:pet_finder/Screens/Update/UpdatePost.dart';
 import 'package:pet_finder/Screens/User_Avatar/user_avatar.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
 
@@ -18,19 +22,28 @@ class _PetDetailState extends State<PetDetail> {
   _PetDetailState({this.pet});
   DocumentSnapshot userFavourite;
   DocumentSnapshot postedInfo;
+  bool isuserLoggedIn = true;
+  String uid;
   @override
   // ignore: must_call_super
   initState() {
-    Crud().checkFavourite(widget.pet.id).then((value) {
+    uid = Crud().userUid();
+    Crud().userPostedinfo(pet.id).then((value) {
       setState(() {
-        userFavourite = value;
-        Crud().userPostedinfo(pet.id).then((value) {
-          setState(() {
-            postedInfo = value;
-          });
-        });
+        postedInfo = value;
       });
     });
+    if (Crud().ifuserLoggedIn()) {
+      Crud().checkFavourite(widget.pet.id).then((value) {
+        setState(() {
+          userFavourite = value;
+        });
+      });
+    } else {
+      setState(() {
+        isuserLoggedIn = false;
+      });
+    }
   }
 
   Widget build(BuildContext context) {
@@ -41,6 +54,7 @@ class _PetDetailState extends State<PetDetail> {
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -51,13 +65,20 @@ class _PetDetailState extends State<PetDetail> {
           ),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.more_horiz,
-              color: Colors.grey[800],
-            ),
-          ),
+          pet.get('Uid') == uid
+              ? Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      dialog(pet.id);
+                    },
+                    child: Icon(
+                      Icons.more_horiz,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
       body: Column(
@@ -66,18 +87,15 @@ class _PetDetailState extends State<PetDetail> {
           Expanded(
             child: Stack(
               children: [
-                Hero(
-                  tag: widget.pet.get('ImageUrl'),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.pet.get('ImageUrl')),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25),
-                      ),
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(widget.pet.get('ImageUrl')),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
                     ),
                   ),
                 ),
@@ -155,17 +173,24 @@ class _PetDetailState extends State<PetDetail> {
                                     });
                                   });
                                 },
-                                child: Icon(
-                                  Icons.favorite,
-                                  color: userFavourite.exists ??
-                                          userFavourite.get('State')
-                                      ? Colors.red
-                                      : Colors.grey,
-                                  size: 28,
-                                ),
+                                child: userFavourite != null
+                                    ? Icon(
+                                        Icons.favorite,
+                                        color: userFavourite.exists
+                                            ? userFavourite.get('State')
+                                                ? Colors.red
+                                                : Colors.grey
+                                            : Colors.grey,
+                                        size: 22,
+                                      )
+                                    : CustomShimmer(),
                               )
-                            : CustomShimmer(),
-                      ),
+                            : Icon(
+                                Icons.favorite,
+                                color: Colors.grey,
+                                size: 22,
+                              ),
+                      )
                     ],
                   ),
                 ),
@@ -215,7 +240,11 @@ class _PetDetailState extends State<PetDetail> {
                     children: [
                       Row(
                         children: [
-                          UserAvatar(),
+                          postedInfo != null
+                              ? UserAvatar(
+                                  userData: postedInfo,
+                                )
+                              : CustomShimmer(),
                           SizedBox(
                             width: 12,
                           ),
@@ -235,9 +264,7 @@ class _PetDetailState extends State<PetDetail> {
                               ),
                               postedInfo != null
                                   ? Text(
-                                      postedInfo.get('FirstName') +
-                                          ' ' +
-                                          postedInfo.get('SecondName'),
+                                      postedInfo.get('FirstName'),
                                       style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 14,
@@ -324,5 +351,58 @@ class _PetDetailState extends State<PetDetail> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> dialog(postId) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Post'),
+          content: Container(
+            height: 150,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.update,
+                    color: Colors.green,
+                  ),
+                  onTap: () {
+                    Get.to(UpdatePost(
+                      petData: pet,
+                    ));
+                  },
+                  title: Text('Updae'),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onTap: () {
+                    Crud().deletePost(postId);
+                    toast();
+                    Get.to(CustomNavigation());
+                  },
+                  title: Text('Delete'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void toast() {
+    Fluttertoast.showToast(
+        msg: "Post Deleted",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }

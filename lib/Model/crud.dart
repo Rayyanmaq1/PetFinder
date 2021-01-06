@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pet_finder/Screens/Update/UpdatePost.dart';
 
 class Crud {
   setPetdata(data) async {
@@ -30,10 +31,23 @@ class Crud {
     return FirebaseAuth.instance.currentUser.uid;
   }
 
+  ifuserLoggedIn() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  deletePost(postid) {
+    FirebaseFirestore.instance.collection('PetData').doc(postid).delete();
+  }
+
   getAllpetData() async {
     return await FirebaseFirestore.instance
         .collection('PetData')
-        .orderBy('TimeStamp', descending: false)
+        .orderBy('TimeStamp', descending: true)
+        .limit(10)
         .get();
   }
 
@@ -46,18 +60,34 @@ class Crud {
         .get();
   }
 
+  currentUsersPosts() async {
+    String uid = userUid();
+    return await FirebaseFirestore.instance
+        .collection('PetData')
+        .where('Uid', isEqualTo: uid)
+        .get();
+  }
+
+  updatePost(postid, data) {
+    print(postid);
+    FirebaseFirestore.instance.collection('PetData').doc(postid).update(data);
+  }
+
   getAllpets() async {
     return FirebaseFirestore.instance.collection('PetData').snapshots();
   }
 
   checkFavourite(postID) async {
-    String uid = userUid();
-    return await FirebaseFirestore.instance
-        .collection('UserData')
-        .doc(uid)
-        .collection('Favourite')
-        .doc(postID)
-        .get();
+    if (ifuserLoggedIn()) {
+      return await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(userUid())
+          .collection('Favourite')
+          .doc(postID)
+          .get();
+    } else {
+      return null;
+    }
   }
 
   getPetDataforFav() async {

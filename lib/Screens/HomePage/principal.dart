@@ -7,6 +7,7 @@ import 'package:pet_finder/Screens/UploadPet/UploadPet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:pet_finder/Widgets/Drawer.dart';
 
 class Principal extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class Principal extends StatefulWidget {
 class _PrincipalState extends State<Principal> {
   List<Pet> pets = getPetList();
   QuerySnapshot petData;
+
   Crud crud = new Crud();
 
   @override
@@ -25,31 +27,34 @@ class _PrincipalState extends State<Principal> {
         petData = value;
       });
     });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return UploadPet();
-          }));
+          })).then((value) {
+            setState(() {
+              initState();
+            });
+          });
         },
         backgroundColor: Colors.blue,
         child: Icon(Icons.file_upload),
       ),
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(
-          Icons.sort,
-          color: Colors.grey[800],
-        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -150,16 +155,15 @@ class _PrincipalState extends State<Principal> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildPetCategory(
-                          Category.HAMSTER, "56", Colors.orange[200]),
-                      buildPetCategory(Category.CAT, "210", Colors.blue[200]),
+                      buildPetCategory(Category.HAMSTER, Colors.orange[200]),
+                      buildPetCategory(Category.CAT, Colors.blue[200]),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildPetCategory(Category.BUNNY, "90", Colors.green[200]),
-                      buildPetCategory(Category.DOG, "340", Colors.red[200]),
+                      buildPetCategory(Category.BUNNY, Colors.green[200]),
+                      buildPetCategory(Category.DOG, Colors.red[200]),
                     ],
                   ),
                 ],
@@ -245,7 +249,7 @@ class _PrincipalState extends State<Principal> {
     );
   }
 
-  Widget buildPetCategory(Category category, String total, Color color) {
+  Widget buildPetCategory(Category category, Color color) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -315,13 +319,6 @@ class _PrincipalState extends State<Principal> {
                       color: Colors.grey[800],
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "Total of " + total,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
                     ),
                   ),
                 ],

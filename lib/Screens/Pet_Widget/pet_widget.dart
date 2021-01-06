@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/route_manager.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/PetDetail/pet_detail.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
@@ -23,21 +24,19 @@ class _PetWidgetState extends State<PetWidget> {
   @override
   // ignore: must_call_super
   initState() {
-    Crud().checkFavourite(widget.pet.id).then((value) {
-      setState(() {
-        userFavourite = value;
-        print(userFavourite.data());
+    if (Crud().ifuserLoggedIn()) {
+      Crud().checkFavourite(widget.pet.id).then((value) {
+        setState(() {
+          userFavourite = value;
+        });
       });
-    });
+    }
   }
 
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PetDetail(pet: widget.pet)),
-        ).then((value) {
+        Get.to(PetDetail(pet: pet)).then((value) {
           setState(() {
             initState();
           });
@@ -66,20 +65,17 @@ class _PetWidgetState extends State<PetWidget> {
             Expanded(
               child: Stack(
                 children: [
-                  Hero(
-                    tag: widget.pet.get('ImageUrl'),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: widget.pet != null
-                              ? NetworkImage(widget.pet.get('ImageUrl'))
-                              : CustomShimmer(),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: widget.pet != null
+                            ? NetworkImage(widget.pet.get('ImageUrl'))
+                            : CustomShimmer(),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
                     ),
                   ),
@@ -94,25 +90,30 @@ class _PetWidgetState extends State<PetWidget> {
                         ),
                         height: 35,
                         width: 35,
-                        child: userFavourite != null
-                            ? GestureDetector(
-                                onTap: () {
-                                  Crud().favourite(pet.id).then((_) {
-                                    setState(() {
-                                      initState();
-                                    });
-                                  });
-                                },
-                                child: Icon(
+                        child: GestureDetector(
+                          onTap: () {
+                            Crud().favourite(pet.id).then((_) {
+                              setState(() {
+                                initState();
+                              });
+                            });
+                          },
+                          child: userFavourite != null
+                              ? Icon(
                                   Icons.favorite,
-                                  color: userFavourite.exists ??
-                                          userFavourite.get('State')
-                                      ? Colors.red
+                                  color: userFavourite.exists
+                                      ? userFavourite.get('State')
+                                          ? Colors.red
+                                          : Colors.grey
                                       : Colors.grey,
                                   size: 22,
+                                )
+                              : Icon(
+                                  Icons.favorite,
+                                  color: Colors.grey,
+                                  size: 22,
                                 ),
-                              )
-                            : CustomShimmer(),
+                        ),
                       ),
                     ),
                   )

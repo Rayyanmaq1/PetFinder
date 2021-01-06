@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_finder/Widgets/AltarDialog.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
@@ -15,20 +16,25 @@ class _FavouriteState extends State<Favourite> {
   bool favExists = false;
   bool runOnce = false;
   QuerySnapshot petData;
+  bool userLoggedIn = true;
   @override
   void initState() {
     uid = Crud().userUid();
-
-    Crud().getPetDataforFav().then((value) {
-      setState(() {
-        petData = value;
+    if (Crud().ifuserLoggedIn()) {
+      Crud().getPetDataforFav().then((value) {
+        setState(() {
+          petData = value;
+        });
       });
-    });
+    } else {
+      setState(() {
+        userLoggedIn = false;
+      });
+    }
 
     super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -41,50 +47,55 @@ class _FavouriteState extends State<Favourite> {
           ),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              petData != null
-                  ? Container(
-                      height: MediaQuery.of(context).size.height * 1,
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('UserData')
-                              .doc(uid)
-                              .collection('Favourite')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                            } else {
-                              return ListView.builder(
-                                itemCount: snapshot.data.docs.length,
-                                // ignore: missing_return
-                                itemBuilder: (context, index) {
-                                  if (snapshot.data.docs[index].get('State')) {
-                                    for (int i = 0;
-                                        i < petData.docs.length;
-                                        i++) {
-                                      if (petData.docs[i].id ==
-                                          snapshot.data.docs[index].id) {
-                                        favExists = true;
-                                        return CustomTile(context, index,
-                                            snapshot, i, petData);
-                                      }
-                                    }
+        body: userLoggedIn
+            ? SingleChildScrollView(
+                child: Column(
+                  children: [
+                    petData != null
+                        ? Container(
+                            height: MediaQuery.of(context).size.height * 1,
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('UserData')
+                                    .doc(uid)
+                                    .collection('Favourite')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
                                   } else {
-                                    return Container();
+                                    return ListView.builder(
+                                      itemCount: snapshot.data.docs.length,
+                                      // ignore: missing_return
+                                      itemBuilder: (context, index) {
+                                        if (snapshot.data.docs[index]
+                                            .get('State')) {
+                                          for (int i = 0;
+                                              i < petData.docs.length;
+                                              i++) {
+                                            if (petData.docs[i].id ==
+                                                snapshot.data.docs[index].id) {
+                                              return CustomTile(context, index,
+                                                  snapshot, i, petData);
+                                            } else {
+                                              continue;
+                                            }
+                                          }
+                                        } else {
+                                          return Container();
+                                        }
+                                        return Container();
+                                      },
+                                    );
                                   }
-                                },
-                              );
-                            }
-                          }),
-                    )
-                  : CustomShimmer(),
-            ],
-          ),
-        ));
+                                }))
+                        : CustomShimmer(),
+                  ],
+                ),
+              )
+            : CustomAlertDialog());
   }
 }
 
@@ -216,6 +227,7 @@ class _CustomTileState extends State<CustomTile> {
                         height: 8,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(
                             Icons.location_on,
@@ -226,11 +238,18 @@ class _CustomTileState extends State<CustomTile> {
                             width: 4,
                           ),
                           petData.docs[i] != null
-                              ? Text(
-                                  petData.docs[i].get('petLocation'),
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
+                              ? Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.4),
+                                  child: Text(
+                                    petData.docs[i].get('petLocation'),
+                                    maxLines: 3,
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 10,
+                                    ),
                                   ),
                                 )
                               : CustomShimmer(),

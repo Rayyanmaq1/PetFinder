@@ -121,24 +121,7 @@ class _RegisterState extends State<Register> {
                                       firstName = value;
                                     },
                                     decoration: InputDecoration(
-                                        hintText: "First Name",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        border: InputBorder.none),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey[200]))),
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      secondName = value;
-                                    },
-                                    decoration: InputDecoration(
-                                        hintText: "Second Name",
+                                        hintText: "Your Name",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none),
