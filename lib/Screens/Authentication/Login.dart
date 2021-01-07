@@ -14,6 +14,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   String email, password;
+  bool showpassword = true;
   // ignore: override_on_non_overriding_member
   GmailAuthentication gmailAuthentication = new GmailAuthentication();
   UserLogin loginAuth = new UserLogin();
@@ -107,10 +108,18 @@ class _LoginState extends State<Login> {
                                         bottom: BorderSide(
                                             color: Colors.grey[200]))),
                                 child: TextField(
+                                  obscureText: showpassword,
                                   onChanged: (value) {
                                     password = value;
                                   },
                                   decoration: InputDecoration(
+                                      suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              showpassword = !showpassword;
+                                            });
+                                          },
+                                          child: Icon(Icons.remove_red_eye)),
                                       hintText: "Password",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),

@@ -5,6 +5,7 @@ import 'package:pet_finder/Model/crud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
 import 'package:pet_finder/Screens/PetDetail/pet_detail.dart';
+import 'package:pet_finder/Widgets/SoldTag.dart';
 
 class Favourite extends StatefulWidget {
   @override
@@ -169,17 +170,24 @@ class _CustomTileState extends State<CustomTile> {
             children: [
               Row(
                 children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                            petData.docs[i].get('ImageUrl'),
-                          ),
-                          fit: BoxFit.fill),
-                    ),
+                  Stack(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                petData.docs[i].get('ImageUrl'),
+                              ),
+                              fit: BoxFit.fill),
+                        ),
+                      ),
+                      petData.docs[i].get('petSold') == 'Sold'
+                          ? SoldTag()
+                          : Container(),
+                    ],
                   ),
                   SizedBox(
                     width: 20,

@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/PetDetail/pet_detail.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
+import 'package:pet_finder/Widgets/SoldTag.dart';
 
 // ignore: must_be_immutable
 class PetWidget extends StatefulWidget {
@@ -79,6 +80,7 @@ class _PetWidgetState extends State<PetWidget> {
                       ),
                     ),
                   ),
+                  pet.get('petSold') == 'Sold' ? SoldTag() : Container(),
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(

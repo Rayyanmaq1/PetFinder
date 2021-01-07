@@ -8,6 +8,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   String email, password, firstName, phoneNumber;
+  bool showpassword = true;
+
   EmailSignIn emailSignIn = new EmailSignIn();
   @override
   Widget build(BuildContext context) {
@@ -100,10 +102,18 @@ class _RegisterState extends State<Register> {
                                           bottom: BorderSide(
                                               color: Colors.grey[200]))),
                                   child: TextField(
+                                    obscureText: showpassword,
                                     onChanged: (value) {
                                       password = value;
                                     },
                                     decoration: InputDecoration(
+                                        suffixIcon: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                showpassword = !showpassword;
+                                              });
+                                            },
+                                            child: Icon(Icons.remove_red_eye)),
                                         hintText: "Password",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
