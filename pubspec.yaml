@@ -41,10 +41,8 @@ dependencies:
   shimmer: ^1.1.2
   smooth_page_indicator: ^0.2.0
   get: ^3.24.0
-
-
-
-  # flutter_facebook_login:
+  flutter_facebook_login:
+  url_launcher: ^5.7.10
 
 
 

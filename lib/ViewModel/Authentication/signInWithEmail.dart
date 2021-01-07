@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EmailSignIn {
-  signInWithEmail(_email, _password, firstName, secondName) async {
+  signInWithEmail(_email, _password, firstName, phoneNumber) async {
     Map<String, dynamic> data = {
       'FirstName': firstName,
-      'SecondName': secondName,
-      'Email': _email
+      'PhoeneNumber': phoneNumber,
+      'Email': _email,
+      'Image': ''
     };
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: _email, password: _password)

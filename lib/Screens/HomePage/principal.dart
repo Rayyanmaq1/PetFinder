@@ -55,15 +55,6 @@ class _PrincipalState extends State<Principal> {
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.notifications_none,
-              color: Colors.grey[800],
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -332,10 +323,21 @@ class _PrincipalState extends State<Principal> {
 
   List<Widget> buildNewestPet() {
     List<Widget> list = [];
+    List<Widget> emptyList = [
+      Center(
+        child: Container(child: Text('No Data')),
+      )
+    ];
+    bool dataAvalible = false;
     for (var i = 0; i < petData.docs.length; i++) {
+      dataAvalible = true;
       list.add(PetWidget(pet: petData.docs[i], index: i));
     }
-    return list;
+    if (dataAvalible == true) {
+      return list;
+    } else {
+      return emptyList;
+    }
   }
 
   Widget buildVet(String imageUrl, String name, String phone) {

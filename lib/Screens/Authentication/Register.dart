@@ -7,7 +7,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String email, password, firstName, secondName;
+  String email, password, firstName, phoneNumber;
   EmailSignIn emailSignIn = new EmailSignIn();
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,24 @@ class _RegisterState extends State<Register> {
                                       firstName = value;
                                     },
                                     decoration: InputDecoration(
-                                        hintText: "Your Name",
+                                        hintText: "Name",
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.grey[200]))),
+                                  child: TextField(
+                                    onChanged: (value) {
+                                      phoneNumber = value;
+                                    },
+                                    decoration: InputDecoration(
+                                        hintText: "Phone Number",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none),
@@ -135,9 +152,30 @@ class _RegisterState extends State<Register> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              await emailSignIn.signInWithEmail(
-                                  email, password, firstName, secondName);
-                              Navigator.popAndPushNamed(context, '/home');
+                              if (email != null &&
+                                  password != null &&
+                                  firstName != null &&
+                                  phoneNumber != null) {
+                                await emailSignIn.signInWithEmail(
+                                    email, password, firstName, phoneNumber);
+                                Navigator.popAndPushNamed(context, '/home');
+                              } else {
+                                showDialog(
+                                  context: (context),
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('Invalid Input'),
+                                      actions: [
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Try Agin'))
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             },
                             child: Container(
                               height: 50,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:pet_finder/Screens/Authentication/Login.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   @override
@@ -9,7 +11,7 @@ class CustomAlertDialog extends StatelessWidget {
       actions: [
         FlatButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/Login');
+            Get.offAll(Login());
           },
           child: Text('Sign In'),
         ),

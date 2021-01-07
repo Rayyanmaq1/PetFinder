@@ -309,11 +309,10 @@ class _UpdatePostState extends State<UpdatePost> {
                   'petCondition': petCondition,
                   'petSold': petSold,
                 };
-                print(widget.petData.id);
 
                 await crud.updatePost(widget.petData.id, data);
                 showToast();
-                Get.to(CustomNavigation());
+                Get.offAll(CustomNavigation());
               },
               icon: Icon(
                 Icons.file_upload,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,11 +12,14 @@ class UploadPet extends StatefulWidget {
 }
 
 class _UploadPetState extends State<UploadPet> {
+  DocumentSnapshot userData;
   // ignore: must_call_super
   void initState() {
     if (crud.ifuserLoggedIn()) {
-      setState(() {
-        uid = crud.userUid();
+      crud.currentUserData().then((value) {
+        setState(() {
+          userData = value;
+        });
       });
     } else {
       setState(() {
@@ -272,7 +276,7 @@ class _UploadPetState extends State<UploadPet> {
                     onPressed: () async {
                       Map<String, dynamic> data = {
                         'TimeStamp': timeStamp,
-                        'Uid': uid,
+                        'Uid': userData.id,
                         'ImageUrl': imageUrl,
                         'petName': petName,
                         'petAge': petAge,
@@ -285,10 +289,52 @@ class _UploadPetState extends State<UploadPet> {
                         'petSold': petSold,
                       };
 
-                      await crud.setPetdata(data).then((_) {
-                        showToast();
-                        Navigator.pop(context);
-                      });
+                      if (imageUrl != null &&
+                          petName != null &&
+                          petAge != null &&
+                          petColor != null &&
+                          petWeight != null &&
+                          petLocation != null &&
+                          petDescription != null) {
+                        if (userData.get('PhoneNumber') != null) {
+                          await crud.setPetdata(data).then((_) {
+                            showToast();
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          showDialog(
+                            context: (context),
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Enter Your Phone Number'),
+                                actions: [
+                                  FlatButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Ok'))
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      } else {
+                        showDialog(
+                          context: (context),
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Invalid Input'),
+                              actions: [
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Try Agin'))
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
                     icon: Icon(
                       Icons.file_upload,

@@ -19,8 +19,8 @@ class _FavouriteState extends State<Favourite> {
   bool userLoggedIn = true;
   @override
   void initState() {
-    uid = Crud().userUid();
     if (Crud().ifuserLoggedIn()) {
+      uid = Crud().userUid();
       Crud().getPetDataforFav().then((value) {
         setState(() {
           petData = value;
@@ -48,52 +48,61 @@ class _FavouriteState extends State<Favourite> {
           centerTitle: true,
         ),
         body: userLoggedIn
-            ? SingleChildScrollView(
-                child: Column(
-                  children: [
-                    petData != null
-                        ? Container(
-                            height: MediaQuery.of(context).size.height * 1,
-                            child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('UserData')
-                                    .doc(uid)
-                                    .collection('Favourite')
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else {
-                                    return ListView.builder(
-                                      itemCount: snapshot.data.docs.length,
-                                      // ignore: missing_return
-                                      itemBuilder: (context, index) {
-                                        if (snapshot.data.docs[index]
-                                            .get('State')) {
-                                          for (int i = 0;
-                                              i < petData.docs.length;
-                                              i++) {
-                                            if (petData.docs[i].id ==
-                                                snapshot.data.docs[index].id) {
-                                              return CustomTile(context, index,
-                                                  snapshot, i, petData);
-                                            } else {
-                                              continue;
-                                            }
+            ? Column(
+                children: [
+                  petData != null
+                      ? Expanded(
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('UserData')
+                                  .doc(uid)
+                                  .collection('Favourite')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data.docs.length,
+                                    // ignore: missing_return
+                                    itemBuilder: (context, index) {
+                                      if (snapshot.data.docs[index]
+                                          .get('State')) {
+                                        for (int i = 0;
+                                            i < petData.docs.length;
+                                            i++) {
+                                          if (petData.docs[i].id ==
+                                              snapshot.data.docs[index].id) {
+                                            favExists = true;
+                                            return CustomTile(context, index,
+                                                snapshot, i, petData);
+                                          } else {
+                                            continue;
                                           }
-                                        } else {
-                                          return Container();
+                                        }
+                                      } else {
+                                        if (favExists == false &&
+                                            runOnce == false) {
+                                          runOnce = true;
+                                          return Center(
+                                            child: Container(
+                                              child: Text('No Data'),
+                                            ),
+                                          );
                                         }
                                         return Container();
-                                      },
-                                    );
-                                  }
-                                }))
-                        : CustomShimmer(),
-                  ],
-                ),
+                                      }
+                                      return Container();
+                                    },
+                                  );
+                                }
+                              }),
+                        )
+                      : Center(child: CustomShimmer()),
+                ],
               )
             : CustomAlertDialog());
   }

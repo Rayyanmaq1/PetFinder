@@ -52,10 +52,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
           onTap: _onItemTapped,
         ), // This trailing comma makes auto-formatting nicer for build methods.
 
-        body: IndexedStack(
-          index: _selectedPage,
-          children: pageList,
-        ),
+        body: pageList[_selectedPage],
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Screens/Pet_Widget/pet_widget.dart';
+import 'package:pet_finder/Screens/Update/UpdateProfile.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:pet_finder/Widgets/AltarDialog.dart';
@@ -17,6 +19,7 @@ class _ProfileState extends State<Profile> {
   QuerySnapshot posts;
   var totalPages = 0;
   bool userLoggedIn = true;
+
   void initState() {
     if (Crud().ifuserLoggedIn()) {
       Crud().currentUserData().then((value) {
@@ -64,11 +67,39 @@ class _ProfileState extends State<Profile> {
                       SizedBox(
                         height: 60,
                       ),
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundImage: userData.data().containsKey('Image')
-                            ? NetworkImage(userData.get('Image'))
-                            : AssetImage('assets/images/ProfilePic.png'),
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 60,
+                            backgroundImage: userData
+                                        .get('Image')
+                                        .toString()
+                                        .length !=
+                                    0
+                                ? NetworkImage(userData.get('Image'))
+                                : AssetImage('assets/images/ProfilePic.png'),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(UpdateUserProfile(
+                                userData: userData,
+                              ));
+                            },
+                            child: Container(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              width: 30,
+                              height: 30,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 40,
@@ -133,11 +164,7 @@ class _ProfileState extends State<Profile> {
                                                 'Phone Number',
                                                 style: textStyle,
                                               ),
-                                              userData.data().containsKey(
-                                                      'PhoneNumber')
-                                                  ? Text(userData
-                                                      .get('PhoneNumber'))
-                                                  : Text('-'),
+                                              Text(userData.get('PhoneNumber')),
                                             ],
                                           ),
                                           SizedBox(

@@ -7,6 +7,7 @@ import 'package:pet_finder/Screens/BottomNavigationBar/CustomNavigation.dart';
 import 'package:pet_finder/Screens/Update/UpdatePost.dart';
 import 'package:pet_finder/Screens/User_Avatar/user_avatar.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PetDetail extends StatefulWidget {
   final DocumentSnapshot pet;
@@ -27,13 +28,13 @@ class _PetDetailState extends State<PetDetail> {
   @override
   // ignore: must_call_super
   initState() {
-    uid = Crud().userUid();
     Crud().userPostedinfo(pet.id).then((value) {
       setState(() {
         postedInfo = value;
       });
     });
     if (Crud().ifuserLoggedIn()) {
+      uid = Crud().userUid();
       Crud().checkFavourite(widget.pet.id).then((value) {
         setState(() {
           userFavourite = value;
@@ -292,12 +293,17 @@ class _PetDetailState extends State<PetDetail> {
                           ],
                           color: Colors.blue[300],
                         ),
-                        child: Text(
-                          "Contact Me",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                        child: GestureDetector(
+                          onTap: () {
+                            _textme();
+                          },
+                          child: Text(
+                            "Contact Me",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -383,7 +389,7 @@ class _PetDetailState extends State<PetDetail> {
                   onTap: () {
                     Crud().deletePost(postId);
                     toast();
-                    Get.to(CustomNavigation());
+                    Get.offAll(CustomNavigation());
                   },
                   title: Text('Delete'),
                 ),
@@ -404,5 +410,11 @@ class _PetDetailState extends State<PetDetail> {
         backgroundColor: Colors.black,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  _textme() async {
+    String userNumber = postedInfo.get('PhoneNumber');
+    String uri = 'sms:$userNumber?body=hello%20there';
+    await launch(uri);
   }
 }

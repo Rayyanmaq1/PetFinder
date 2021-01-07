@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:pet_finder/Screens/Authentication/Register.dart';
-// import 'package:pet_finder/ViewModel/FaceBookAuthentication.dart';
+import 'package:pet_finder/ViewModel/Authentication/FaceBookAuthentication.dart';
 import 'package:pet_finder/ViewModel/Authentication/GmailAuthentication.dart';
 import 'package:pet_finder/ViewModel/Authentication/Emaillogin.dart';
+import 'package:pet_finder/Screens/BottomNavigationBar/CustomNavigation.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class _LoginState extends State<Login> {
   // ignore: override_on_non_overriding_member
   GmailAuthentication gmailAuthentication = new GmailAuthentication();
   UserLogin loginAuth = new UserLogin();
-  // FaceBookAuthentcation faceBookAuthentcation = new FaceBookAuthentcation();
+  FaceBookAuthentcation faceBookAuthentcation = new FaceBookAuthentcation();
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -213,11 +215,11 @@ class _LoginState extends State<Login> {
                             Expanded(
                                 child: GestureDetector(
                               onTap: () {
-                                // faceBookAuthentcation
-                                //     .signInWithFacebook()
-                                //     .then((_) {
-                                //   Navigator.popAndPushNamed(context, '/home');
-                                // });
+                                faceBookAuthentcation
+                                    .signInWithFacebook()
+                                    .then((_) {
+                                  Get.offAll(CustomNavigation());
+                                });
                               },
                               child: Container(
                                 height: 50,

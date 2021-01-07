@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pet_finder/Screens/Update/UpdatePost.dart';
 
 class Crud {
   setPetdata(data) async {
@@ -29,6 +28,10 @@ class Crud {
 
   userUid() {
     return FirebaseAuth.instance.currentUser.uid;
+  }
+
+  getuser() {
+    return FirebaseAuth.instance.currentUser;
   }
 
   ifuserLoggedIn() {
@@ -62,6 +65,7 @@ class Crud {
 
   currentUsersPosts() async {
     String uid = userUid();
+
     return await FirebaseFirestore.instance
         .collection('PetData')
         .where('Uid', isEqualTo: uid)
@@ -69,8 +73,15 @@ class Crud {
   }
 
   updatePost(postid, data) {
-    print(postid);
     FirebaseFirestore.instance.collection('PetData').doc(postid).update(data);
+  }
+
+  updateProfile(uid, data) {
+    FirebaseFirestore.instance.collection('UserData').doc(uid).update(data);
+  }
+
+  signOut() {
+    FirebaseAuth.instance.signOut();
   }
 
   getAllpets() async {

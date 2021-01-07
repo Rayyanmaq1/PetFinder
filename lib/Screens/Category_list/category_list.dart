@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/Pet_Widget/pet_widget.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
+import 'package:pet_finder/Widgets/AltarDialog.dart';
 
 class CategoryList extends StatefulWidget {
   final Category category;
@@ -79,21 +80,28 @@ class _CategoryListState extends State<CategoryList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           petData != null
-              ? Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: GridView.builder(
-                      itemCount: petData.docs.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:
-                              (orientation == Orientation.portrait) ? 2 : 3),
-                      itemBuilder: (BuildContext context, int index) {
-                        return PetWidget(
-                            pet: petData.docs[index], index: index);
-                      },
-                    ),
-                  ),
-                )
+              ? petData.docs.length != 0
+                  ? Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: GridView.builder(
+                          itemCount: petData.docs.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      (orientation == Orientation.portrait)
+                                          ? 2
+                                          : 3),
+                          itemBuilder: (BuildContext context, int index) {
+                            return PetWidget(
+                                pet: petData.docs[index], index: index);
+                          },
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Container(child: Text('No Data')),
+                    )
               : CustomShimmer(),
         ],
       ),
