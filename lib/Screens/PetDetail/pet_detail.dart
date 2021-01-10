@@ -6,6 +6,7 @@ import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/BottomNavigationBar/CustomNavigation.dart';
 import 'package:pet_finder/Screens/Update/UpdatePost.dart';
 import 'package:pet_finder/Screens/User_Avatar/user_avatar.dart';
+import 'package:pet_finder/ViewModel/SizeConfig.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -121,7 +122,7 @@ class _PetDetailState extends State<PetDetail> {
                             style: TextStyle(
                               color: Colors.grey[800],
                               fontWeight: FontWeight.bold,
-                              fontSize: 24,
+                              fontSize: SizeConfig.textMultiplier * 3.0,
                             ),
                           ),
                           SizedBox(
@@ -163,8 +164,8 @@ class _PetDetailState extends State<PetDetail> {
                           shape: BoxShape.circle,
                           color: Colors.grey[100],
                         ),
-                        height: 50,
-                        width: 50,
+                        height: SizeConfig.heightMultiplier * 6,
+                        width: SizeConfig.widthMultiplier * 12,
                         child: userFavourite != null
                             ? GestureDetector(
                                 onTap: () {
@@ -321,7 +322,7 @@ class _PetDetailState extends State<PetDetail> {
   buildPetFeature(String value, String feature) {
     return Expanded(
       child: Container(
-        height: 70,
+        height: SizeConfig.heightMultiplier * 9,
         padding: EdgeInsets.all(12),
         margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
@@ -339,7 +340,7 @@ class _PetDetailState extends State<PetDetail> {
               value,
               style: TextStyle(
                 color: Colors.grey[800],
-                fontSize: 16,
+                fontSize: SizeConfig.textMultiplier * 2.0,
                 fontWeight: FontWeight.bold,
               ),
             ),

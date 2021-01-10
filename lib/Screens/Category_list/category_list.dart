@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/Pet_Widget/pet_widget.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
-import 'package:pet_finder/Widgets/AltarDialog.dart';
 
+// ignore: must_be_immutable
 class CategoryList extends StatefulWidget {
   final Category category;
   BuildContext context;
@@ -36,7 +36,6 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -83,15 +82,12 @@ class _CategoryListState extends State<CategoryList> {
               ? petData.docs.length != 0
                   ? Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.all(8.0),
                         child: GridView.builder(
                           itemCount: petData.docs.length,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      (orientation == Orientation.portrait)
-                                          ? 2
-                                          : 3),
+                                  childAspectRatio: 1 / 1.6, crossAxisCount: 2),
                           itemBuilder: (BuildContext context, int index) {
                             return PetWidget(
                                 pet: petData.docs[index], index: index);

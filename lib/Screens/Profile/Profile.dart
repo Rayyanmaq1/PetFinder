@@ -4,6 +4,7 @@ import 'package:pet_finder/Model/crud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Screens/Pet_Widget/pet_widget.dart';
 import 'package:pet_finder/Screens/Update/UpdateProfile.dart';
+import 'package:pet_finder/ViewModel/SizeConfig.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:pet_finder/Widgets/AltarDialog.dart';
@@ -180,7 +181,9 @@ class _ProfileState extends State<Profile> {
                                             height: 20,
                                           ),
                                           Container(
-                                            height: 300,
+                                            height:
+                                                SizeConfig.heightMultiplier *
+                                                    33,
                                             child: FutureBuilder(
                                               future:
                                                   Crud().currentUsersPosts(),

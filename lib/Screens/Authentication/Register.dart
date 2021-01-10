@@ -168,7 +168,6 @@ class _RegisterState extends State<Register> {
                                   phoneNumber != null) {
                                 await emailSignIn.signInWithEmail(
                                     email, password, firstName, phoneNumber);
-                                Navigator.popAndPushNamed(context, '/home');
                               } else {
                                 showDialog(
                                   context: (context),

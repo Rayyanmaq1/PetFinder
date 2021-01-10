@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/route_manager.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Screens/PetDetail/pet_detail.dart';
+import 'package:pet_finder/ViewModel/SizeConfig.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
 import 'package:pet_finder/Widgets/SoldTag.dart';
 
@@ -55,11 +56,8 @@ class _PetWidgetState extends State<PetWidget> {
             width: 1,
           ),
         ),
-        margin: EdgeInsets.only(
-            right: widget.index != null ? 16 : 0,
-            left: widget.index == 0 ? 16 : 0,
-            bottom: 16),
-        width: 220,
+        margin: EdgeInsets.only(bottom: 16, left: 12, right: 5),
+        width: SizeConfig.widthMultiplier * 55,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[

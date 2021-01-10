@@ -26,6 +26,14 @@ class Crud {
     return downloadUrl;
   }
 
+  userStatus() async {
+    String uid = userUid();
+    return await FirebaseFirestore.instance
+        .collection('BlockedUser')
+        .doc(uid)
+        .get();
+  }
+
   userUid() {
     return FirebaseAuth.instance.currentUser.uid;
   }

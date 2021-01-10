@@ -6,6 +6,7 @@ import 'package:pet_finder/Screens/Search/Search.dart';
 import 'package:pet_finder/Screens/UploadPet/UploadPet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_finder/Model/crud.dart';
+import 'package:pet_finder/ViewModel/SizeConfig.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pet_finder/Widgets/Drawer.dart';
 
@@ -15,7 +16,6 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
-  List<Pet> pets = getPetList();
   QuerySnapshot petData;
 
   Crud crud = new Crud();
@@ -68,7 +68,7 @@ class _PrincipalState extends State<Principal> {
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 24,
+                  fontSize: SizeConfig.textMultiplier * 2.9,
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class _PrincipalState extends State<Principal> {
                 "Lovely pet in anywhere",
                 style: TextStyle(
                   color: Colors.grey[800],
-                  fontSize: 24,
+                  fontSize: SizeConfig.textMultiplier * 2.9,
                 ),
               ),
             ),
@@ -94,7 +94,8 @@ class _PrincipalState extends State<Principal> {
                   },
                   decoration: InputDecoration(
                     hintText: 'Search',
-                    hintStyle: TextStyle(fontSize: 16),
+                    hintStyle:
+                        TextStyle(fontSize: SizeConfig.textMultiplier * 1.8),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide(
@@ -112,7 +113,7 @@ class _PrincipalState extends State<Principal> {
                       child: Icon(
                         Icons.search,
                         color: Colors.black,
-                        size: 24,
+                        size: SizeConfig.textMultiplier * 2.6,
                       ),
                     ),
                   ),
@@ -127,7 +128,7 @@ class _PrincipalState extends State<Principal> {
                   Text(
                     "Pet Category",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: SizeConfig.textMultiplier * 2.2,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
                     ),
@@ -182,7 +183,7 @@ class _PrincipalState extends State<Principal> {
             ),
             petData != null
                 ? Container(
-                    height: 280,
+                    height: SizeConfig.heightMultiplier * 35,
                     child: ListView(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
@@ -205,7 +206,7 @@ class _PrincipalState extends State<Principal> {
                   Text(
                     "Vets Near You",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: SizeConfig.textMultiplier * 1.9,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
                     ),
@@ -218,7 +219,7 @@ class _PrincipalState extends State<Principal> {
               ),
             ),
             Container(
-              height: 130,
+              height: SizeConfig.heightMultiplier * 16,
               margin: EdgeInsets.only(bottom: 16),
               child: PageView(
                 physics: BouncingScrollPhysics(),
@@ -251,7 +252,7 @@ class _PrincipalState extends State<Principal> {
               ));
         },
         child: Container(
-          height: 80,
+          height: SizeConfig.textMultiplier * 8.3,
           padding: EdgeInsets.all(12),
           margin: EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -266,8 +267,8 @@ class _PrincipalState extends State<Principal> {
           child: Row(
             children: [
               Container(
-                height: 56,
-                width: 56,
+                height: SizeConfig.textMultiplier * 5.9,
+                width: SizeConfig.textMultiplier * 5.9,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: color.withOpacity(0.5),
@@ -356,8 +357,8 @@ class _PrincipalState extends State<Principal> {
       child: Row(
         children: [
           Container(
-            height: 98,
-            width: 98,
+            height: SizeConfig.heightMultiplier * 12,
+            width: SizeConfig.widthMultiplier * 30,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(imageUrl),
@@ -366,7 +367,7 @@ class _PrincipalState extends State<Principal> {
             ),
           ),
           SizedBox(
-            width: 16,
+            width: SizeConfig.widthMultiplier * 4,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

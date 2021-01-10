@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:get/route_manager.dart';
+import 'package:pet_finder/Screens/Authentication/Login.dart';
 import 'package:pet_finder/Screens/Favourite/Favourite.dart';
 import 'package:pet_finder/Screens/HomePage/principal.dart';
 import 'package:pet_finder/Screens/Profile/Profile.dart';
+import 'package:pet_finder/Model/crud.dart';
 
 class CustomNavigation extends StatefulWidget {
   @override
@@ -13,12 +15,18 @@ class _CustomNavigationState extends State<CustomNavigation> {
   PageController controller = PageController();
   List<Widget> pageList = List<Widget>();
   int index;
+  bool userStatus = false;
   int _selectedPage = 1;
   @override
   void initState() {
     pageList.add(Favourite());
     pageList.add(Principal());
     pageList.add(Profile());
+    Crud().userStatus().then((value) {
+      setState(() {
+        userStatus = value.exists;
+      });
+    });
 
     super.initState();
   }
@@ -52,7 +60,21 @@ class _CustomNavigationState extends State<CustomNavigation> {
           onTap: _onItemTapped,
         ), // This trailing comma makes auto-formatting nicer for build methods.
 
-        body: pageList[_selectedPage],
+        body: userStatus == false
+            ? pageList[_selectedPage]
+            : AlertDialog(
+                title: Text('You are Blocked'),
+                content: Text(
+                    'You have been blocked by user for some issue Logout or login from another account'),
+                actions: [
+                  FlatButton(
+                      onPressed: () {
+                        Crud().signOut();
+                        Get.offAll(Login());
+                      },
+                      child: Text('LogOut'))
+                ],
+              ),
       ),
     );
   }
@@ -60,6 +82,9 @@ class _CustomNavigationState extends State<CustomNavigation> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedPage = index;
+      Crud().userStatus().then((value) {
+        userStatus = value.exists;
+      });
     });
   }
 }
