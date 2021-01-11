@@ -117,7 +117,7 @@ class _ProfileState extends State<Profile> {
                               padding: EdgeInsets.all(30),
                               child: Column(children: <Widget>[
                                 SizedBox(
-                                  height: 60,
+                                  height: SizeConfig.heightMultiplier * 3.0,
                                 ),
                                 Column(
                                   children: [
@@ -155,7 +155,9 @@ class _ProfileState extends State<Profile> {
                                             ],
                                           ),
                                           SizedBox(
-                                            height: 30,
+                                            height:
+                                                SizeConfig.heightMultiplier *
+                                                    3.0,
                                           ),
                                           Row(
                                             mainAxisAlignment:
@@ -169,7 +171,9 @@ class _ProfileState extends State<Profile> {
                                             ],
                                           ),
                                           SizedBox(
-                                            height: 40,
+                                            height:
+                                                SizeConfig.heightMultiplier *
+                                                    4.0,
                                           ),
                                           Center(
                                               child: Text(
@@ -178,7 +182,9 @@ class _ProfileState extends State<Profile> {
                                                 fontWeight: FontWeight.bold),
                                           )),
                                           SizedBox(
-                                            height: 20,
+                                            height:
+                                                SizeConfig.heightMultiplier *
+                                                    2.0,
                                           ),
                                           Container(
                                             height:
@@ -213,7 +219,6 @@ class _ProfileState extends State<Profile> {
                                                       itemBuilder:
                                                           (context, index) {
                                                         return Container(
-                                                          height: 250,
                                                           child: PetWidget(
                                                               pet: snapshot.data
                                                                   .docs[index],

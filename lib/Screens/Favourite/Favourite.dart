@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_finder/ViewModel/SizeConfig.dart';
 import 'package:pet_finder/Widgets/AltarDialog.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -173,8 +174,8 @@ class _CustomTileState extends State<CustomTile> {
                   Stack(
                     children: [
                       Container(
-                        width: 100,
-                        height: 100,
+                        width: SizeConfig.widthMultiplier * 25,
+                        height: SizeConfig.heightMultiplier * 12,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           image: DecorationImage(
@@ -190,7 +191,7 @@ class _CustomTileState extends State<CustomTile> {
                     ],
                   ),
                   SizedBox(
-                    width: 20,
+                    width: SizeConfig.widthMultiplier * 5,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +223,7 @@ class _CustomTileState extends State<CustomTile> {
                                           ? Colors.red
                                           : Colors.blue,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: SizeConfig.textMultiplier * 1.3,
                                 ),
                               )
                             : CustomShimmer(),

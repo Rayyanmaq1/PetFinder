@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:pet_finder/Screens/Authentication/ForgetPassword.dart';
 import 'package:pet_finder/Screens/Authentication/Register.dart';
 import 'package:pet_finder/ViewModel/Authentication/FaceBookAuthentication.dart';
 import 'package:pet_finder/ViewModel/Authentication/GmailAuthentication.dart';
 import 'package:pet_finder/ViewModel/Authentication/Emaillogin.dart';
 import 'package:pet_finder/Screens/BottomNavigationBar/CustomNavigation.dart';
+import 'package:pet_finder/ViewModel/SizeConfig.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,7 +14,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  @override
   String email, password;
   bool showpassword = true;
   // ignore: override_on_non_overriding_member
@@ -36,7 +37,7 @@ class _LoginState extends State<Login> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: 80,
+              height: SizeConfig.heightMultiplier * 10,
             ),
             Padding(
               padding: EdgeInsets.all(20),
@@ -71,7 +72,7 @@ class _LoginState extends State<Login> {
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          height: 60,
+                          height: SizeConfig.heightMultiplier * 5,
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -131,26 +132,31 @@ class _LoginState extends State<Login> {
                         SizedBox(
                           height: 40,
                         ),
-                        Text(
-                          "Forgot Password?",
-                          style: TextStyle(color: Colors.grey),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(ForgetPassword());
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
                         SizedBox(
-                          height: 40,
+                          height: SizeConfig.heightMultiplier * 4,
                         ),
                         GestureDetector(
                           onTap: () {
                             loginAuth.emailLogin(email, password, context);
                           },
                           child: Container(
-                            height: 50,
-                            width: 150,
+                            height: SizeConfig.heightMultiplier * 5.5,
+                            width: SizeConfig.widthMultiplier * 30,
                             decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
                                     spreadRadius: 3,
                                     blurRadius: 10,
-                                    color: Colors.blue[200],
+                                    color: Colors.grey[300],
                                     offset: Offset(5, 5),
                                   ),
                                 ],
@@ -203,7 +209,7 @@ class _LoginState extends State<Login> {
                                   });
                                 },
                                 child: Container(
-                                  height: 50,
+                                  height: SizeConfig.heightMultiplier * 6.5,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(50),
                                       color: Colors.red[600]),
@@ -219,7 +225,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             SizedBox(
-                              width: 30,
+                              width: SizeConfig.widthMultiplier * 5,
                             ),
                             Expanded(
                                 child: GestureDetector(
@@ -231,7 +237,7 @@ class _LoginState extends State<Login> {
                                 });
                               },
                               child: Container(
-                                height: 50,
+                                height: SizeConfig.heightMultiplier * 6.5,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
                                     color: Colors.blue[600]),

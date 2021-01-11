@@ -1,17 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_finder/ViewModel/Authentication/signInWithEmail.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pet_finder/ViewModel/SizeConfig.dart';
 
-class Register extends StatefulWidget {
+class ForgetPassword extends StatefulWidget {
   @override
-  _RegisterState createState() => _RegisterState();
+  _ForgetPasswordState createState() => _ForgetPasswordState();
 }
 
-class _RegisterState extends State<Register> {
-  String email, password, firstName, phoneNumber;
-  bool showpassword = true;
-
-  EmailSignIn emailSignIn = new EmailSignIn();
+class _ForgetPasswordState extends State<ForgetPassword> {
+  String email;
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,70 +85,9 @@ class _RegisterState extends State<Register> {
                                           bottom: BorderSide(
                                               color: Colors.grey[200]))),
                                   child: TextField(
-                                    onChanged: (value) {
-                                      email = value;
-                                    },
+                                    controller: controller,
                                     decoration: InputDecoration(
                                         hintText: "Enter Your Email",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        border: InputBorder.none),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey[200]))),
-                                  child: TextField(
-                                    obscureText: showpassword,
-                                    onChanged: (value) {
-                                      password = value;
-                                    },
-                                    decoration: InputDecoration(
-                                        suffixIcon: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                showpassword = !showpassword;
-                                              });
-                                            },
-                                            child: Icon(Icons.remove_red_eye)),
-                                        hintText: "Password",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        border: InputBorder.none),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey[200]))),
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      firstName = value;
-                                    },
-                                    decoration: InputDecoration(
-                                        hintText: "Name",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        border: InputBorder.none),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey[200]))),
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      phoneNumber = value;
-                                    },
-                                    decoration: InputDecoration(
-                                        hintText: "Phone Number",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none),
@@ -162,30 +100,8 @@ class _RegisterState extends State<Register> {
                             height: SizeConfig.heightMultiplier * 7,
                           ),
                           GestureDetector(
-                            onTap: () async {
-                              if (email != null &&
-                                  password != null &&
-                                  firstName != null &&
-                                  phoneNumber != null) {
-                                await emailSignIn.signInWithEmail(
-                                    email, password, firstName, phoneNumber);
-                              } else {
-                                showDialog(
-                                  context: (context),
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text('Invalid Input'),
-                                      actions: [
-                                        FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('Try Agin'))
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
+                            onTap: () {
+                              resetPassword(context);
                             },
                             child: Container(
                               height: SizeConfig.heightMultiplier * 6,
@@ -203,7 +119,7 @@ class _RegisterState extends State<Register> {
                                   color: Colors.blue[700]),
                               child: Center(
                                 child: Text(
-                                  "Register",
+                                  "Get Code",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -220,5 +136,18 @@ class _RegisterState extends State<Register> {
             ],
           )),
     );
+  }
+
+  void resetPassword(BuildContext context) async {
+    if (controller.text.length == 0 || !controller.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Enter valid email");
+      return;
+    }
+
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: controller.text);
+    Fluttertoast.showToast(
+        msg:
+            "Reset password link has sent your mail please use it to change the password.");
+    Navigator.pop(context);
   }
 }
