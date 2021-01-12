@@ -8,6 +8,7 @@ import 'package:pet_finder/Screens/Update/UpdatePost.dart';
 import 'package:pet_finder/Screens/User_Avatar/user_avatar.dart';
 import 'package:pet_finder/ViewModel/SizeConfig.dart';
 import 'package:pet_finder/Widgets/CustomShimmer.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PetDetail extends StatefulWidget {
@@ -246,7 +247,19 @@ class _PetDetailState extends State<PetDetail> {
                               ? UserAvatar(
                                   userData: postedInfo,
                                 )
-                              : CustomShimmer(),
+                              : Shimmer.fromColors(
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  baseColor: Colors.white,
+                                  highlightColor: Colors.grey[100],
+                                  direction: ShimmerDirection.ltr,
+                                ),
                           SizedBox(
                             width: 12,
                           ),
@@ -380,7 +393,7 @@ class _PetDetailState extends State<PetDetail> {
                       petData: pet,
                     ));
                   },
-                  title: Text('Updae'),
+                  title: Text('Update'),
                 ),
                 ListTile(
                   leading: Icon(

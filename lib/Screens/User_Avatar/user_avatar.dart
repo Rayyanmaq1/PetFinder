@@ -20,7 +20,7 @@ class UserAvatar extends StatelessWidget {
         ),
         image: DecorationImage(
           image: userData != null
-              ? userData.data().containsKey('Image')
+              ? userData.get('Image').toString().length != 0
                   ? NetworkImage(userData.get('Image'))
                   : AssetImage("assets/images/ProfilePic.png")
               : CustomShimmer(),

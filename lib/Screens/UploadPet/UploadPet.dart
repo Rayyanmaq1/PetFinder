@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_finder/Model/crud.dart';
 import 'package:pet_finder/Widgets/AltarDialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UploadPet extends StatefulWidget {
   @override
@@ -46,6 +47,8 @@ class _UploadPetState extends State<UploadPet> {
       body: userLoggedIn
           ? SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: 80,
@@ -58,18 +61,37 @@ class _UploadPetState extends State<UploadPet> {
                         setState(() {});
                       });
                     },
-                    child: CircleAvatar(
-                      backgroundImage: imageUrl == null
-                          ? AssetImage('assets/images/cat.png')
-                          : NetworkImage(imageUrl.toString()),
-                      radius: 60,
-                      backgroundColor: Colors.blue[300],
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      child: Container(
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 25,
+                          color: Colors.black45,
+                        ),
+                        alignment: Alignment.bottomRight,
+                      ),
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 8,
+                                spreadRadius: 3,
+                                offset: Offset(3, 4),
+                                color: Colors.grey)
+                          ],
+                          color: Colors.blue[200],
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          image: DecorationImage(
+                            image: imageUrl == null
+                                ? AssetImage('assets/images/cat.png')
+                                : NetworkImage(imageUrl.toString()),
+                          )),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: Colors.grey[200]))),
@@ -88,7 +110,6 @@ class _UploadPetState extends State<UploadPet> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(color: Colors.grey[200]),
@@ -110,7 +131,6 @@ class _UploadPetState extends State<UploadPet> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: Colors.grey[200]))),
@@ -129,7 +149,6 @@ class _UploadPetState extends State<UploadPet> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: Colors.grey[200]))),
@@ -149,7 +168,6 @@ class _UploadPetState extends State<UploadPet> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: Colors.grey[200]))),
@@ -168,7 +186,6 @@ class _UploadPetState extends State<UploadPet> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: Colors.grey[200]))),
@@ -184,91 +201,102 @@ class _UploadPetState extends State<UploadPet> {
                       ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Pet Category',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                  Container(
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Pet Category',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              DropdownButton<String>(
+                                value: petCategory,
+                                items: <String>[
+                                  'HAMSTER',
+                                  'CAT',
+                                  'BUNNY',
+                                  'DOG'
+                                ].map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    petCategory = val;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: DropdownButton<String>(
-                              value: petCategory,
-                              items: <String>['HAMSTER', 'CAT', 'BUNNY', 'DOG']
-                                  .map((String value) {
-                                return new DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  petCategory = val;
-                                });
-                              },
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Pet Condition',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              new DropdownButton<String>(
+                                value: petCondition,
+                                items: <String>[
+                                  'MATING',
+                                  'ADOPTION',
+                                  'DISAPPEAR'
+                                ].map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    petCondition = val;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Pet Condition',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Pet Sold',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)),
+                              new DropdownButton<String>(
+                                value: petSold,
+                                items: <String>['Sold', 'Not Sold']
+                                    .map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    petSold = val;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: new DropdownButton<String>(
-                              value: petCondition,
-                              items: <String>['MATING', 'ADOPTION', 'DISAPPER']
-                                  .map((String value) {
-                                return new DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  petCondition = val;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Pet Sold',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16)),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: new DropdownButton<String>(
-                              value: petSold,
-                              items: <String>['Sold', 'Not Sold']
-                                  .map((String value) {
-                                return new DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (val) {
-                                setState(() {
-                                  petSold = val;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                   FlatButton.icon(
                     padding: EdgeInsets.all(10),
@@ -296,12 +324,15 @@ class _UploadPetState extends State<UploadPet> {
                           petWeight != null &&
                           petLocation != null &&
                           petDescription != null) {
-                        if (userData.get('PhoneNumber') != null) {
+                        if (userData.get('PhoneNumber').toString().length !=
+                            0) {
+                          print(userData.get('PhoneNumber'));
                           await crud.setPetdata(data).then((_) {
                             showToast();
                             Navigator.pop(context);
                           });
                         } else {
+                          print(userData.get('PhoneNumber'));
                           showDialog(
                             context: (context),
                             builder: (context) {

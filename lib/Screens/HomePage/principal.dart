@@ -325,8 +325,12 @@ class _PrincipalState extends State<Principal> {
   List<Widget> buildNewestPet() {
     List<Widget> list = [];
     List<Widget> emptyList = [
-      Center(
-        child: Container(child: Text('No Data')),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(child: Text('No Data')),
+        ],
       )
     ];
     bool dataAvalible = false;

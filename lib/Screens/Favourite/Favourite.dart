@@ -66,6 +66,13 @@ class _FavouriteState extends State<Favourite> {
                                   return Center(
                                       child: CircularProgressIndicator());
                                 } else {
+                                  if (snapshot.data.docs.length == 0) {
+                                    return Container(
+                                      child: Center(
+                                        child: Text('No Data'),
+                                      ),
+                                    );
+                                  }
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: snapshot.data.docs.length,
@@ -89,10 +96,9 @@ class _FavouriteState extends State<Favourite> {
                                         if (favExists == false &&
                                             runOnce == false) {
                                           runOnce = true;
-                                          return Center(
-                                            child: Container(
-                                              child: Text('No Data'),
-                                            ),
+                                          return Container(
+                                            child:
+                                                Center(child: Text('No Data')),
                                           );
                                         }
                                         return Container();

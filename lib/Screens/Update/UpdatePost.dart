@@ -248,7 +248,7 @@ class _UpdatePostState extends State<UpdatePost> {
                       padding: const EdgeInsets.all(8.0),
                       child: new DropdownButton<String>(
                         value: petCondition,
-                        items: <String>['MATING', 'ADOPTION', 'DISAPPER']
+                        items: <String>['MATING', 'ADOPTION', 'DISAPPEAR']
                             .map((String value) {
                           return new DropdownMenuItem<String>(
                             value: value,

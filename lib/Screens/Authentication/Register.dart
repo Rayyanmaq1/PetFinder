@@ -86,6 +86,7 @@ class _RegisterState extends State<Register> {
                                           bottom: BorderSide(
                                               color: Colors.grey[200]))),
                                   child: TextField(
+                                    keyboardType: TextInputType.emailAddress,
                                     onChanged: (value) {
                                       email = value;
                                     },
@@ -114,7 +115,9 @@ class _RegisterState extends State<Register> {
                                                 showpassword = !showpassword;
                                               });
                                             },
-                                            child: Icon(Icons.remove_red_eye)),
+                                            child: showpassword
+                                                ? Icon(Icons.visibility_off)
+                                                : Icon(Icons.visibility)),
                                         hintText: "Password",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),

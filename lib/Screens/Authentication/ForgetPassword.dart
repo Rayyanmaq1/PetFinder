@@ -85,6 +85,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                           bottom: BorderSide(
                                               color: Colors.grey[200]))),
                                   child: TextField(
+                                    keyboardType: TextInputType.emailAddress,
                                     controller: controller,
                                     decoration: InputDecoration(
                                         hintText: "Enter Your Email",

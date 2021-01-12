@@ -47,7 +47,7 @@ class AuthExceptionHandler {
   ///
   /// Accepts AuthExceptionHandler.errorType
   ///
-  static generateExceptionMessage(exceptionCode) {
+  generateExceptionMessage(exceptionCode) {
     print('this');
     String errorMessage;
     switch (exceptionCode) {

@@ -43,14 +43,11 @@ dependencies:
   get: ^3.24.0
   flutter_facebook_login:
   url_launcher: ^5.7.10
-  
-
-
-
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

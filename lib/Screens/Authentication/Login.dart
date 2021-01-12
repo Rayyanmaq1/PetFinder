@@ -93,6 +93,7 @@ class _LoginState extends State<Login> {
                                         bottom: BorderSide(
                                             color: Colors.grey[200]))),
                                 child: TextField(
+                                  keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
                                     email = value;
                                   },
@@ -120,7 +121,9 @@ class _LoginState extends State<Login> {
                                               showpassword = !showpassword;
                                             });
                                           },
-                                          child: Icon(Icons.remove_red_eye)),
+                                          child: showpassword
+                                              ? Icon(Icons.visibility_off)
+                                              : Icon(Icons.visibility)),
                                       hintText: "Password",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
@@ -252,13 +255,23 @@ class _LoginState extends State<Login> {
                               ),
                             )),
                           ],
-                        )
+                        ),
+                        SizedBox(
+                          height: SizeConfig.heightMultiplier * 10,
+                          child: Center(
+                              child: Container(
+                            child: Text(
+                              'Powered by Virtual Soft',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          )),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

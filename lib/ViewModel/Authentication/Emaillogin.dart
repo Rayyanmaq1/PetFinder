@@ -7,7 +7,7 @@ class UserLogin {
   emailLogin(email, password, context) async {
     var _status;
     try {
-      final authResult = await FirebaseAuth.instance
+      UserCredential authResult = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
       if (authResult.user != null) {
