@@ -64,7 +64,7 @@ class _PetDetailState extends State<PetDetail> {
           },
           child: Icon(
             Icons.arrow_back,
-            color: Colors.grey[800],
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -77,7 +77,7 @@ class _PetDetailState extends State<PetDetail> {
                     },
                     child: Icon(
                       Icons.more_horiz,
-                      color: Colors.grey[800],
+                      color: Colors.white,
                     ),
                   ),
                 )
